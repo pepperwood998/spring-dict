@@ -12,7 +12,7 @@ public class TransTypeDetail {
     }
 
     @Id
-    @Column(name = "type")
+    @Column(name = "trans_type")
     private int type;
 
     @Column(name = "type_value")

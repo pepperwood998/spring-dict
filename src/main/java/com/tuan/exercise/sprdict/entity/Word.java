@@ -18,13 +18,13 @@ public class Word {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "key")
+    @Column(name = "word_key")
     private String key;
 
     @Column(name = "meanings")
     private String meanings;
 
-    @Column(name = "type")
+    @Column(name = "trans_type")
     private int type;
 
     public int getId() {

@@ -22,7 +22,9 @@
   <c:set var="isAdmin" value="${ not empty role && role=='ADM' }" />
 
   <div class="container">
-    <h3>${ role }</h3>
+    <h2>${ role }</h2>
+    <a href="${ contextPath }/logout"><button type="button"
+        class="btn btn-link">Sign out</button></a>
     <form class="form-inline" action="${ contextPath }/search">
       <!-- Start of drop down -->
       <div class="form-group">
@@ -53,8 +55,6 @@
       <!-- End of search box -->
     </form>
 
-    <a href="${ contextPath }/logout"><button type="button"
-        class="btn btn-link">Sign out</button></a>
     <hr>
 
     <c:if test="${ not empty words }">

@@ -71,4 +71,27 @@
   <tx:annotation-driven
     transaction-manager="myTransactionManager" />
 
+  <mvc:interceptors>
+    <mvc:interceptor>
+      <mvc:mapping path="/login" />
+      <bean
+        class="com.tuan.exercise.sprdict.interceptor.LoginInterceptor"></bean>
+    </mvc:interceptor>
+
+    <mvc:interceptor>
+      <mvc:mapping path="/" />
+      <mvc:mapping path="/search" />
+      <mvc:mapping path="/edit" />
+      <mvc:mapping path="/logout" />
+      <bean
+        class="com.tuan.exercise.sprdict.interceptor.SessionInterceptor"></bean>
+    </mvc:interceptor>
+
+    <mvc:interceptor>
+      <mvc:mapping path="/edit" />
+      <bean
+        class="com.tuan.exercise.sprdict.interceptor.AuthorizationInterceptor"></bean>
+    </mvc:interceptor>
+  </mvc:interceptors>
+
 </beans>  

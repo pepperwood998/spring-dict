@@ -10,6 +10,8 @@ public interface DictionaryDao {
     public List<Word> getWordsRelative(String relativeKey, int transType);
 
     public Word getWordById(int id);
-    
+
     public List<TransTypeDetail> getTransTypes();
+
+    public void updateWord(Word word);
 }

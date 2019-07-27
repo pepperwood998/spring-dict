@@ -18,9 +18,13 @@
   src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+  <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
   <div class="container">
     <h2>${ wordOperation }</h2>
-    <form:form action="/edit" modelAttribute="word" method="post">
+    <a href="${ contextPath }/"><button type="button"
+        class="btn btn-link">Continue search</button></a>
+    <form:form action="${ contextPath }/edit" modelAttribute="word" method="post">
       <div class="form-group">
         <form:hidden cssClass="form-control" path="id" />
       </div>
@@ -40,7 +44,7 @@
           cssClass="form-control" id="sel-trans-type" path="type">
           <c:forEach items="${ transTypes }" var="transType">
             <c:choose>
-              <c:when test="${ transType.type == word.type }">
+              <c:when test="${ word.type == transType.type }">
                 <form:option value="${ transType.type }"
                   selected="selected">${ transType.typeValue }</form:option>
               </c:when>

@@ -65,4 +65,12 @@ public class DictionaryDaoImpl implements DictionaryDao {
         return typeDetails;
     }
 
+    @Override
+    @Transactional
+    public void updateWord(Word word) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        
+        currentSession.saveOrUpdate(word);
+    }
+
 }
