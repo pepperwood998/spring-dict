@@ -82,6 +82,7 @@
       <mvc:mapping path="/" />
       <mvc:mapping path="/search" />
       <mvc:mapping path="/edit" />
+      <mvc:mapping path="/add" />
       <mvc:mapping path="/logout" />
       <bean
         class="com.tuan.exercise.sprdict.interceptor.SessionInterceptor"></bean>
@@ -89,6 +90,7 @@
 
     <mvc:interceptor>
       <mvc:mapping path="/edit" />
+      <mvc:mapping path="/add" />
       <bean
         class="com.tuan.exercise.sprdict.interceptor.AuthorizationInterceptor"></bean>
     </mvc:interceptor>

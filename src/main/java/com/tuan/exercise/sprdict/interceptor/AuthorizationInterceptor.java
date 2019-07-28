@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import com.tuan.exercise.sprdict.constant.Role;
+
 public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Override
@@ -15,7 +17,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         String role = (String) session.getAttribute("role");
 
-        boolean isAdmin = "ADM".equals(role);
+        boolean isAdmin = Role.ADMIN.equals(role);
         if (!isAdmin) {
             response.sendRedirect(request.getContextPath() + "/");
             return false;

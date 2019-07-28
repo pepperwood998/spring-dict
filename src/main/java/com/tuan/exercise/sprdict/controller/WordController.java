@@ -46,35 +46,40 @@ public class WordController {
         return Page.INDEX;
     }
 
-    @GetMapping("/edit")
+    @GetMapping(value = { "/edit", "/add" })
     public String getEditForm(
-            @RequestParam(name = "word-id", defaultValue = "0") String wordIdStr,
+            @RequestParam(name = "word-id", required = false) String wordIdStr,
             Model model) {
 
-        int wordId = 0;
-        try {
-            wordId = Integer.valueOf(wordIdStr);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
+        Word word;
+        if (wordIdStr != null) {
+            int wordId = 0;
+            try {
+                wordId = Integer.valueOf(wordIdStr);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
 
-        Word word = dictionaryDao.getWordById(wordId);
-        List<TransTypeDetail> transTypes = dictionaryDao.getTransTypes();
+            word = dictionaryDao.getWordById(wordId);
+        } else {
+            word = new Word();
+        }
         model.addAttribute("word", word);
+        List<TransTypeDetail> transTypes = dictionaryDao.getTransTypes();
         model.addAttribute("transTypes", transTypes);
-        model.addAttribute("wordOperation", "Edit word");
+
         return Page.WORD_INPUT;
     }
     
-    @PostMapping("/edit")
-    public String doEdit(@ModelAttribute("word") Word editedWord) {
+    @PostMapping(value = { "/edit", "/add" })
+    public String doUpdateWord(@ModelAttribute("word") Word editedWord) {
 
-        System.out.println(editedWord.getMeanings());
-        dictionaryDao.updateWord(editedWord);
+        dictionaryDao.saveWord(editedWord);
 
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("word-id", editedWord.getId());
+        paramMap.put("search-word", editedWord.getKey());
+        paramMap.put("trans-type", editedWord.getType());
 
-        return Page.Direct.getRedirect("/edit", paramMap);
+        return Page.Direct.getRedirect("/search", paramMap);
     }
 }

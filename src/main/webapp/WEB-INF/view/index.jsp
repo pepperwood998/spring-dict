@@ -55,6 +55,10 @@
       <!-- End of search box -->
     </form>
 
+    <c:if test="${ isAdmin }">
+      <a href="${ contextPath }/add"><button type="button"
+          class="btn btn-primary">Add a Word</button></a>
+    </c:if>
     <hr>
 
     <c:if test="${ not empty words }">
