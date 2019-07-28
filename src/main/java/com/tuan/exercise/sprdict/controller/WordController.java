@@ -16,6 +16,7 @@ import com.tuan.exercise.sprdict.constant.Page;
 import com.tuan.exercise.sprdict.dao.DictionaryDao;
 import com.tuan.exercise.sprdict.entity.TransTypeDetail;
 import com.tuan.exercise.sprdict.entity.Word;
+import com.tuan.exercise.sprdict.util.CommonUtil;
 
 @Controller
 public class WordController {
@@ -37,40 +38,29 @@ public class WordController {
             e.printStackTrace();
         }
 
-        int wordCount = 3;
+        int wordCount = 4;
+        int totalPageCount = CommonUtil.getTotalPageCount(dictionaryDao.getWordCount(transType), wordCount);
+        if (page > totalPageCount) {
+            page = totalPageCount;
+        } else if (page < 1) {
+            page = 1;
+        }
+
         int rowStart = (page - 1) * wordCount + 1;
-        List<Word> searchRes = dictionaryDao
-                .getWordsRelative(searchWord, transType, rowStart, wordCount);
-        model.addAttribute("words", searchRes);
+        model.addAttribute("words", dictionaryDao.getWordsRelative(searchWord, transType, rowStart, wordCount));
 
-        List<TransTypeDetail> transTypes = dictionaryDao.getTransTypes();
-        model.addAttribute("curTransType", transType);
-
-        int totalPageCount = 
-                (int) Math.ceil((double)dictionaryDao.getWordCount(transType) / wordCount);
-        int pageStart;
         int pageCount = 3;
         if (pageCount > totalPageCount) {
-            pageStart = 1;
             pageCount = totalPageCount;
-        } else {
-            int lowerMoveThreshold = (int) (Math.ceil((double)pageCount / 2) + 1L);
-            if (page < lowerMoveThreshold) {
-                pageStart = 1;
-            } else {
-                int upperStopThreshold = totalPageCount - pageCount / 2 + 1;
-                if (page < upperStopThreshold) {
-                    pageStart = page - (int) (Math.ceil((double)pageCount / 2) - 1L);
-                } else {
-                    pageStart = totalPageCount - pageCount + 1;
-                }
-            }
         }
+        int pageStart = CommonUtil.getPageStart(page, pageCount, totalPageCount);
+        int pageEnd = CommonUtil.getPageEnd(pageStart, pageCount);
+
         model.addAttribute("pageStart", pageStart);
-        model.addAttribute("pageEnd", pageStart + pageCount - 1);
+        model.addAttribute("pageEnd", pageEnd);
 
         model.addAttribute("searchWord", searchWord);
-        model.addAttribute("transTypes", transTypes);
+        model.addAttribute("transTypes", dictionaryDao.getTransTypes());
         model.addAttribute("curTransType", transType);
         model.addAttribute("curPage", page);
         return Page.INDEX;
