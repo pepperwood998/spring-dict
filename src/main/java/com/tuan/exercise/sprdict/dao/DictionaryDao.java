@@ -14,4 +14,6 @@ public interface DictionaryDao {
     public List<TransTypeDetail> getTransTypes();
 
     public void saveWord(Word word);
+
+    public void deleteWord(int wordId);
 }

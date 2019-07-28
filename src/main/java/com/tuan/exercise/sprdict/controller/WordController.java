@@ -71,6 +71,21 @@ public class WordController {
         return Page.WORD_INPUT;
     }
     
+    @GetMapping("/delete")
+    public String doDeleteWord(@RequestParam("word-id") String wordIdStr) {
+        
+        int wordId = 0;
+        try {
+            wordId = Integer.valueOf(wordIdStr);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        
+        dictionaryDao.deleteWord(wordId);
+        
+        return Page.Direct.getRedirect("/search", null);
+    }
+    
     @PostMapping(value = { "/edit", "/add" })
     public String doUpdateWord(@ModelAttribute("word") Word editedWord) {
 

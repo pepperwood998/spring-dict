@@ -73,4 +73,17 @@ public class DictionaryDaoImpl implements DictionaryDao {
         currentSession.saveOrUpdate(word);
     }
 
+    @Override
+    @Transactional
+    public void deleteWord(int wordId) {
+        Session currentSession = sessionFactory.getCurrentSession();
+
+        String queryStr = "delete from Word as w where w.id = :wordId";
+        @SuppressWarnings("rawtypes")
+        Query query = currentSession.createQuery(queryStr)
+                .setParameter("wordId", wordId);
+
+        query.executeUpdate();
+    }
+
 }
