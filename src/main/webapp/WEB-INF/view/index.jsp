@@ -95,6 +95,27 @@
           </c:forEach>
         </tbody>
       </table>
+
+      <ul class="pagination">
+        <c:forEach begin="${ pageStart }" end="${ pageEnd }"
+          var="page">
+          <c:url value="/search" var="pagingUrl">
+            <c:param name="search-word" value="${ searchWord }"></c:param>
+            <c:param name="trans-type" value="${ curTransType }"></c:param>
+            <c:param name="page" value="${ page }"></c:param>
+          </c:url>
+          <c:choose>
+            <c:when test="${ curPage == page }">
+              <li class="page-item active"><a class="page-link"
+                href="${ pagingUrl }">${ page }</a></li>
+            </c:when>
+            <c:otherwise>
+              <li class="page-item"><a class="page-link"
+                href="${ pagingUrl }">${ page }</a></li>
+            </c:otherwise>
+          </c:choose>
+        </c:forEach>
+      </ul>
     </c:if>
   </div>
 

@@ -27,6 +27,7 @@ public class WordController {
     public String search(
             @RequestParam(name = "search-word", defaultValue = "") String searchWord,
             @RequestParam(name = "trans-type", defaultValue = "0") String transTypeStr,
+            @RequestParam(name = "page", defaultValue = "1") int page,
             Model model) {
 
         int transType = 0;
@@ -35,14 +36,43 @@ public class WordController {
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-        List<Word> searchRes = dictionaryDao.getWordsRelative(searchWord, transType);
-        List<TransTypeDetail> transTypes = dictionaryDao.getTransTypes();
 
+        int wordCount = 3;
+        int rowStart = (page - 1) * wordCount + 1;
+        List<Word> searchRes = dictionaryDao
+                .getWordsRelative(searchWord, transType, rowStart, wordCount);
         model.addAttribute("words", searchRes);
+
+        List<TransTypeDetail> transTypes = dictionaryDao.getTransTypes();
+        model.addAttribute("curTransType", transType);
+
+        int totalPageCount = 
+                (int) Math.ceil((double)dictionaryDao.getWordCount(transType) / wordCount);
+        int pageStart;
+        int pageCount = 3;
+        if (pageCount > totalPageCount) {
+            pageStart = 1;
+            pageCount = totalPageCount;
+        } else {
+            int lowerMoveThreshold = (int) (Math.ceil((double)pageCount / 2) + 1L);
+            if (page < lowerMoveThreshold) {
+                pageStart = 1;
+            } else {
+                int upperStopThreshold = totalPageCount - pageCount / 2 + 1;
+                if (page < upperStopThreshold) {
+                    pageStart = page - (int) (Math.ceil((double)pageCount / 2) - 1L);
+                } else {
+                    pageStart = totalPageCount - pageCount + 1;
+                }
+            }
+        }
+        model.addAttribute("pageStart", pageStart);
+        model.addAttribute("pageEnd", pageStart + pageCount - 1);
+
         model.addAttribute("searchWord", searchWord);
         model.addAttribute("transTypes", transTypes);
         model.addAttribute("curTransType", transType);
-
+        model.addAttribute("curPage", page);
         return Page.INDEX;
     }
 

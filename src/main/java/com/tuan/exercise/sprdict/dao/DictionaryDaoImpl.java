@@ -23,17 +23,21 @@ public class DictionaryDaoImpl implements DictionaryDao {
     
     @Override
     @Transactional
-    public List<Word> getWordsRelative(String relativeKey, int transType) {
+    public List<Word> getWordsRelative(String relativeKey, int transType, int rowStart, int rowCount) {
         List<Word> words;
 
         Session currentSession = sessionFactory.getCurrentSession();
 
         String queryStr = "from Word as w "
                 + "where w.key like :relativekey "
-                + "and w.type = :transType";
+                + "and w.type = :transType "
+                + "order by w.key";
         Query<Word> query = currentSession.createQuery(queryStr, Word.class)
                 .setParameter("relativekey", String.format("%%%s%%", relativeKey))
                 .setParameter("transType", transType);
+        query.setFirstResult(rowStart - 1);
+        query.setMaxResults(rowCount);
+
         words = query.getResultList();
 
         return words;
@@ -84,6 +88,20 @@ public class DictionaryDaoImpl implements DictionaryDao {
                 .setParameter("wordId", wordId);
 
         query.executeUpdate();
+    }
+
+    @Override
+    @Transactional
+    public Long getWordCount(int transType) {
+        Session currentSession = sessionFactory.getCurrentSession();
+
+        String queryStr = "select count(*) as row_num "
+                + "from Word as w "
+                + "where w.type = :transType";
+        Query<Long> query = currentSession.createQuery(queryStr, Long.class)
+                .setParameter("transType", transType);
+
+        return query.getSingleResult();
     }
 
 }

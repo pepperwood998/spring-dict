@@ -7,7 +7,7 @@ import com.tuan.exercise.sprdict.entity.Word;
 
 public interface DictionaryDao {
 
-    public List<Word> getWordsRelative(String relativeKey, int transType);
+    public List<Word> getWordsRelative(String relativeKey, int transType, int rowStart, int rowCount);
 
     public Word getWordById(int id);
 
@@ -16,4 +16,6 @@ public interface DictionaryDao {
     public void saveWord(Word word);
 
     public void deleteWord(int wordId);
+
+    public Long getWordCount(int transType);
 }
