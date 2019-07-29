@@ -18,7 +18,7 @@
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 <script>
-  var confirmDelete = (e) => {
+  var confirmDelete = function(e) {
       var wordId = e.target.getAttribute('data-word-id');
       bootbox.confirm({
         message: "Are you sure you want to delete this word?",
@@ -53,8 +53,8 @@
     <form class="form-inline" action="${ contextPath }/search">
       <!-- Start of drop down -->
       <div class="form-group">
-        <label for="sel-trans-type">Select translation type:</label> <select
-          class="form-control" id="sel-trans-type" name="trans-type">
+        <label for="sel-trans-type" class="mb-2 mr-sm-2">Select translation type:</label> <select
+          class="form-control mb-2 mr-sm-2" id="sel-trans-type" name="trans-type">
           <c:forEach items="${ transTypes }" var="transType">
             <c:choose>
               <c:when test="${ transType.type == curTransType }">
@@ -71,10 +71,10 @@
       
       <!-- Start of search box -->
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search"
+        <input type="text" class="form-control mb-2" placeholder="Search"
           name="search-word" value="${ searchWord }">
         <div class="input-group-append">
-          <button class="btn btn-success" type="submit">Go</button>
+          <button class="btn btn-outline-success mb-2" type="submit">Go</button>
         </div>
       </div>
       <!-- End of search box -->
@@ -111,8 +111,8 @@
                 </c:url>
                 <td>
                   <a href="${ detailUrl }"><button
-                      type="button" class="btn btn-link">Edit</button></a>
-                  <button type="button" class="btn btn-link"
+                      type="button" class="btn btn-outline-secondary">Edit</button></a>
+                  <button type="button" class="btn text-danger"
                     onclick="confirmDelete(event)" data-word-id="${ word.id }">Delete</button>
                 </td>
               </c:if>
@@ -143,6 +143,5 @@
       </ul>
     </c:if>
   </div>
-
 </body>
 </html>
