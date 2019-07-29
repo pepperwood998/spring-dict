@@ -15,12 +15,37 @@
   src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script
   src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script>
+  var confirmDelete = (e) => {
+      var wordId = e.target.getAttribute('data-word-id');
+      bootbox.confirm({
+        message: "Are you sure you want to delete this word?",
+        buttons: {
+          confirm: {
+              label: 'Yes',
+              className: 'btn-success'
+          },
+          cancel: {
+              label: 'No',
+              className: 'btn-danger'
+          }
+        },
+        callback: function (result) {
+          if (result)
+            window.location.href=$("#context-path").val() + "/delete?word-id=" + wordId;
+        }
+      });
+    };
+</script>
 </head>
 <body>
   <c:set var="contextPath" value="${pageContext.request.contextPath}" />
   <c:set var="role" value="${sessionScope.role}" />
   <c:set var="isAdmin" value="${ not empty role && role=='ADM' }" />
 
+  <input type="hidden" id="context-path" value="${ contextPath }" />
   <div class="container">
     <h2>${ role }</h2>
     <a href="${ contextPath }/logout"><button type="button"
@@ -87,8 +112,8 @@
                 <td>
                   <a href="${ detailUrl }"><button
                       type="button" class="btn btn-link">Edit</button></a>
-                  <a href="${ deleteUrl }"><button
-                      type="button" class="btn btn-link">Delete</button></a>
+                  <button type="button" class="btn btn-link"
+                    onclick="confirmDelete(event)" data-word-id="${ word.id }">Delete</button>
                 </td>
               </c:if>
             </tr>

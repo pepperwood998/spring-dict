@@ -65,12 +65,16 @@ public class WordController {
             Model model) {
 
         Word word;
+        boolean editMode = false;
         if (wordId >= 0) {
             word = dictionaryDao.getWordById(wordId);
+            editMode = true;
         } else {
             word = new Word();
+            editMode = false;
         }
         model.addAttribute("word", word);
+        model.addAttribute("editMode", editMode);
         List<TransTypeDetail> transTypes = dictionaryDao.getTransTypes();
         model.addAttribute("transTypes", transTypes);
 

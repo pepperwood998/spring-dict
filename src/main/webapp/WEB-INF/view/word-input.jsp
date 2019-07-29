@@ -3,8 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<c:set var="wordOperation" value="${ empty word ? 'Add Word' : 'Edit Word' }"></c:set>
-<c:set var="editMode" value="${ not empty word }"></c:set>
+<c:set var="wordOperation" value="${ editMode ? 'Edit Word' : 'Add Word' }"></c:set>
 <!DOCTYPE html>
 <html>
 <head>
