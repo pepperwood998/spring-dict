@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="wordOperation" value="${ empty word ? 'Add Word' : 'Edit Word' }"></c:set>
+<c:set var="editMode" value="${ not empty word }"></c:set>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,8 +33,16 @@
       </div>
       <div class="form-group">
         <label for="word">Word:</label>
-        <form:input cssClass="form-control" path="key"
-          placeholder="Enter word" />
+        <c:choose>
+          <c:when test="${ editMode }">
+            <form:input cssClass="form-control" path="key"
+              placeholder="Enter word" readonly="true" />
+          </c:when>
+          <c:otherwise>
+            <form:input cssClass="form-control" path="key"
+              placeholder="Enter word" />
+          </c:otherwise>
+        </c:choose>
       </div>
       <div class="form-group">
         <label for="meanings">Meanings:</label>
@@ -42,20 +51,41 @@
       </div>
       <div class="form-group">
         <label for="sel-trans-type">Select translation type:</label>
-        <form:select
-          cssClass="form-control" id="sel-trans-type" path="type">
-          <c:forEach items="${ transTypes }" var="transType">
-            <c:choose>
-              <c:when test="${ word.type == transType.type }">
-                <form:option value="${ transType.type }"
-                  selected="selected">${ transType.typeValue }</form:option>
-              </c:when>
-              <c:otherwise>
-                <form:option value="${ transType.type }">${ transType.typeValue }</form:option>
-              </c:otherwise>
-            </c:choose>
-          </c:forEach>
-        </form:select>
+        <!-- disable key and translation type when in edit mode -->
+        <c:choose>
+          <c:when test="${ editMode }">
+            <form:select cssClass="form-control" id="sel-trans-type"
+              path="type" disabled="true">
+              <c:forEach items="${ transTypes }" var="transType">
+                <c:choose>
+                  <c:when test="${ word.type == transType.type }">
+                    <form:option value="${ transType.type }"
+                      selected="selected">${ transType.typeValue }</form:option>
+                  </c:when>
+                  <c:otherwise>
+                    <form:option value="${ transType.type }">${ transType.typeValue }</form:option>
+                  </c:otherwise>
+                </c:choose>
+              </c:forEach>
+            </form:select>
+          </c:when>
+          <c:otherwise>
+            <form:select cssClass="form-control" id="sel-trans-type"
+              path="type">
+              <c:forEach items="${ transTypes }" var="transType">
+                <c:choose>
+                  <c:when test="${ word.type == transType.type }">
+                    <form:option value="${ transType.type }"
+                      selected="selected">${ transType.typeValue }</form:option>
+                  </c:when>
+                  <c:otherwise>
+                    <form:option value="${ transType.type }">${ transType.typeValue }</form:option>
+                  </c:otherwise>
+                </c:choose>
+              </c:forEach>
+            </form:select>
+          </c:otherwise>
+        </c:choose>
       </div>
       <button type="submit" class="btn btn-primary">Update</button>
     </form:form>

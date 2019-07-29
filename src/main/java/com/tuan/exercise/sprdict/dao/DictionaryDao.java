@@ -17,5 +17,5 @@ public interface DictionaryDao {
 
     public void deleteWord(int wordId);
 
-    public Long getWordCount(int transType);
+    public Long getWordCount(String relativeKey, int transType);
 }

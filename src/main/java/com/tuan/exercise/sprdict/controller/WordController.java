@@ -32,7 +32,7 @@ public class WordController {
             Model model) {
 
         int wordCount = 4;
-        int totalPageCount = CommonUtil.getTotalPageCount(dictionaryDao.getWordCount(transType), wordCount);
+        int totalPageCount = CommonUtil.getTotalPageCount(dictionaryDao.getWordCount(searchWord, transType), wordCount);
         if (page > totalPageCount) {
             page = totalPageCount;
         } else if (page < 1) {

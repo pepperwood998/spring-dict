@@ -85,13 +85,15 @@ public class DictionaryDaoImpl implements DictionaryDao {
 
     @Override
     @Transactional
-    public Long getWordCount(int transType) {
+    public Long getWordCount(String relativeKey, int transType) {
         Session currentSession = sessionFactory.getCurrentSession();
 
         String queryStr = "select count(*) as row_num "
                 + "from Word as w "
-                + "where w.type = :transType";
+                + "where w.key like :relativeKey "
+                + "and w.type = :transType";
         Query<Long> query = currentSession.createQuery(queryStr, Long.class)
+                .setParameter("relativeKey", String.format("%%%s%%", relativeKey))
                 .setParameter("transType", transType);
 
         return query.getSingleResult();
