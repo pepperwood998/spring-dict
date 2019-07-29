@@ -9,6 +9,7 @@ import javax.persistence.Table;
 @Table(name = "type_detail")
 public class TransTypeDetail {
     public TransTypeDetail() {
+        super();
     }
 
     @Id
@@ -32,5 +33,10 @@ public class TransTypeDetail {
 
     public void setTypeValue(String typeValue) {
         this.typeValue = typeValue;
+    }
+
+    @Override
+    public String toString() {
+        return "TransTypeDetail [type=" + type + ", typeValue=" + typeValue + "]";
     }
 }

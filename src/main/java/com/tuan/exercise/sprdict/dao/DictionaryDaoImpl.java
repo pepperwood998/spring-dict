@@ -20,12 +20,10 @@ public class DictionaryDaoImpl implements DictionaryDao {
 
     @Autowired
     private SessionFactory sessionFactory;
-    
+
     @Override
     @Transactional
     public List<Word> getWordsRelative(String relativeKey, int transType, int rowStart, int rowCount) {
-        List<Word> words;
-
         Session currentSession = sessionFactory.getCurrentSession();
 
         String queryStr = "from Word as w "
@@ -38,24 +36,20 @@ public class DictionaryDaoImpl implements DictionaryDao {
         query.setFirstResult(rowStart - 1);
         query.setMaxResults(rowCount);
 
-        words = query.getResultList();
-
-        return words;
+        return query.getResultList();
     }
 
     @Override
     @Transactional
     public Word getWordById(int id) {
         Session currentSession = sessionFactory.getCurrentSession();
-        Word word;
-        
+
         String queryStr = "from Word as w "
                 + "where w.id = :id";
         Query<Word> query = currentSession.createQuery(queryStr, Word.class)
                 .setParameter("id", id);
-        word = query.getSingleResult();
-        
-        return word;
+
+        return query.getSingleResult();
     }
 
     @Override
@@ -64,9 +58,8 @@ public class DictionaryDaoImpl implements DictionaryDao {
         Session currentSession = sessionFactory.getCurrentSession();
 
         Query<TransTypeDetail> query = currentSession.createQuery("from TransTypeDetail", TransTypeDetail.class);
-        List<TransTypeDetail> typeDetails = query.getResultList();
-        
-        return typeDetails;
+
+        return query.getResultList();
     }
 
     @Override

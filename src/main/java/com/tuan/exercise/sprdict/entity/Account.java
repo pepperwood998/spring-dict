@@ -11,6 +11,7 @@ import javax.persistence.Table;
 @Table(name = "account")
 public class Account {
     public Account() {
+        super();
     }
 
     @Id

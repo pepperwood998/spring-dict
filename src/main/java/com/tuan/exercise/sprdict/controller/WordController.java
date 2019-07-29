@@ -27,16 +27,9 @@ public class WordController {
     @GetMapping(value = { "/", "/search" })
     public String search(
             @RequestParam(name = "search-word", defaultValue = "") String searchWord,
-            @RequestParam(name = "trans-type", defaultValue = "0") String transTypeStr,
+            @RequestParam(name = "trans-type", defaultValue = "0") int transType,
             @RequestParam(name = "page", defaultValue = "1") int page,
             Model model) {
-
-        int transType = 0;
-        try {
-            transType = Integer.valueOf(transTypeStr);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
 
         int wordCount = 4;
         int totalPageCount = CommonUtil.getTotalPageCount(dictionaryDao.getWordCount(transType), wordCount);
@@ -68,18 +61,11 @@ public class WordController {
 
     @GetMapping(value = { "/edit", "/add" })
     public String getEditForm(
-            @RequestParam(name = "word-id", required = false) String wordIdStr,
+            @RequestParam(name = "word-id", defaultValue = "-1") int wordId,
             Model model) {
 
         Word word;
-        if (wordIdStr != null) {
-            int wordId = 0;
-            try {
-                wordId = Integer.valueOf(wordIdStr);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-
+        if (wordId >= 0) {
             word = dictionaryDao.getWordById(wordId);
         } else {
             word = new Word();
@@ -90,30 +76,22 @@ public class WordController {
 
         return Page.WORD_INPUT;
     }
-    
+
     @GetMapping("/delete")
-    public String doDeleteWord(@RequestParam("word-id") String wordIdStr) {
-        
-        int wordId = 0;
-        try {
-            wordId = Integer.valueOf(wordIdStr);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        
+    public String doDeleteWord(@RequestParam("word-id") int wordId) {
         dictionaryDao.deleteWord(wordId);
-        
+
         return Page.Direct.getRedirect("/search", null);
     }
-    
-    @PostMapping(value = { "/edit", "/add" })
-    public String doUpdateWord(@ModelAttribute("word") Word editedWord) {
 
-        dictionaryDao.saveWord(editedWord);
+    @PostMapping(value = { "/edit", "/add" })
+    public String doUpdateWord(@ModelAttribute("word") Word savedWord) {
+
+        dictionaryDao.saveWord(savedWord);
 
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("search-word", editedWord.getKey());
-        paramMap.put("trans-type", editedWord.getType());
+        paramMap.put("search-word", savedWord.getKey());
+        paramMap.put("trans-type", savedWord.getType());
 
         return Page.Direct.getRedirect("/search", paramMap);
     }

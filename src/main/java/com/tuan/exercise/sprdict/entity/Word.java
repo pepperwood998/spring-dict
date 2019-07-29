@@ -11,6 +11,7 @@ import javax.persistence.Table;
 @Table(name = "word")
 public class Word {
     public Word() {
+        super();
     }
 
     @Id
@@ -57,5 +58,10 @@ public class Word {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Word [id=" + id + ", key=" + key + ", meanings=" + meanings + ", type=" + type + "]";
     }
 }

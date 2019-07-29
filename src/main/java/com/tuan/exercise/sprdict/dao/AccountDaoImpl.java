@@ -39,5 +39,4 @@ public class AccountDaoImpl implements AccountDao {
 
         return role;
     }
-
 }
