@@ -13,6 +13,8 @@ public interface DictionaryDao {
 
     public List<TransTypeDetail> getTransTypes();
 
+    public void saveMeanings(int wordId, String meanings);
+
     public void saveWord(Word word);
 
     public void deleteWord(int wordId);

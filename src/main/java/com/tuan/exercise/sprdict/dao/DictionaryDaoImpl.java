@@ -33,8 +33,11 @@ public class DictionaryDaoImpl implements DictionaryDao {
         Query<Word> query = currentSession.createQuery(queryStr, Word.class)
                 .setParameter("relativekey", String.format("%%%s%%", relativeKey))
                 .setParameter("transType", transType);
-        query.setFirstResult(rowStart - 1);
-        query.setMaxResults(rowCount);
+
+        if (rowStart > 0) {
+            query.setFirstResult(rowStart - 1);
+            query.setMaxResults(rowCount);
+        }
 
         return query.getResultList();
     }
@@ -64,10 +67,26 @@ public class DictionaryDaoImpl implements DictionaryDao {
 
     @Override
     @Transactional
+    public void saveMeanings(int wordId, String meanings) {
+        Session currentSession = sessionFactory.getCurrentSession();
+
+        String queryStr = "update Word as w set w.meanings = :meanings "
+                + "where id = :id";
+
+        @SuppressWarnings("rawtypes")
+        Query query = currentSession.createQuery(queryStr)
+        .setParameter("meanings", meanings)
+        .setParameter("id", wordId);
+
+        query.executeUpdate();
+    }
+
+    @Override
+    @Transactional
     public void saveWord(Word word) {
         Session currentSession = sessionFactory.getCurrentSession();
-        
-        currentSession.saveOrUpdate(word);
+
+        currentSession.save(word);
     }
 
     @Override

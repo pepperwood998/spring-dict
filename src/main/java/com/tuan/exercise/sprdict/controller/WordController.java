@@ -62,7 +62,7 @@ public class WordController {
     @GetMapping(value = { "/edit", "/add" })
     public String getEditForm(
             @RequestParam(name = "word-id", defaultValue = "-1") int wordId,
-            Model model) {
+            Model model) throws CloneNotSupportedException {
 
         Word word;
         boolean editMode = false;
@@ -88,14 +88,26 @@ public class WordController {
         return Page.Direct.getRedirect("/search", null);
     }
 
-    @PostMapping(value = { "/edit", "/add" })
-    public String doUpdateWord(@ModelAttribute("word") Word savedWord) {
+    @PostMapping("/edit")
+    public String doEditWord(@ModelAttribute("word") Word updatedWord) {
 
-        dictionaryDao.saveWord(savedWord);
+        dictionaryDao.saveMeanings(updatedWord.getId(), updatedWord.getMeanings());
 
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("search-word", savedWord.getKey());
-        paramMap.put("trans-type", savedWord.getType());
+        paramMap.put("search-word", updatedWord.getKey());
+        paramMap.put("trans-type", updatedWord.getType());
+
+        return Page.Direct.getRedirect("/search", paramMap);
+    }
+
+    @PostMapping("/add")
+    public String doAddWord(@ModelAttribute("word") Word newWord) {
+
+        dictionaryDao.saveWord(newWord);
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("search-word", newWord.getKey());
+        paramMap.put("trans-type", newWord.getType());
 
         return Page.Direct.getRedirect("/search", paramMap);
     }

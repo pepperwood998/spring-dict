@@ -26,7 +26,17 @@
     <h2>${ wordOperation }</h2>
     <a href="${ contextPath }/"><button type="button"
         class="btn btn-link">Continue search</button></a>
-    <form:form action="${ contextPath }/edit" modelAttribute="word" method="post">
+
+    <c:choose>
+      <c:when test="${ editMode }">
+        <c:url value="/edit" var="operationUrl" />
+      </c:when>
+      <c:otherwise>
+        <c:url value="/add" var="operationUrl" />
+      </c:otherwise>
+    </c:choose>
+
+    <form:form action="${ operationUrl }" modelAttribute="word" method="post">
       <div class="form-group">
         <form:hidden cssClass="form-control" path="id" />
       </div>
